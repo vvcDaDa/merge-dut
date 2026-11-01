@@ -63,3 +63,10 @@ footer{max-width:1576px;margin-inline:auto;font-size:12px;padding:18px 0 24px}.o
 .mobile-device .overlay h2{font-size:26px}.mobile-device .overlay p{font-size:14px}.mobile-device .overlay button{min-height:44px}
 @keyframes mobile-unlock{from{transform:scale(.9)}to{transform:scale(1)}}
 @media(prefers-reduced-motion:reduce){.mobile-device .level.unlocked img{animation:none}}
+
+/* Explicit edges and pixel height avoid zero-sized canvases in embedded browsers. */
+#game canvas{top:0;right:0;bottom:0;left:0}
+#boot-status{position:absolute;top:0;right:0;bottom:0;left:0;z-index:9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px;text-align:center;color:#526849;font-size:14px;background:#efeee3}
+#boot-status[hidden]{display:none}
+#boot-retry{min-height:44px;padding:12px 24px;border-radius:6px;background:#356554;color:#fff}
+#boot-retry[hidden]{display:none}

@@ -2,7 +2,7 @@
 const PERFORMANCE = CampusPlatform.profile({ua:navigator.userAgent,coarse:window.matchMedia && window.matchMedia('(pointer: coarse)').matches,dpr:window.devicePixelRatio,memory:navigator.deviceMemory,cores:navigator.hardwareConcurrency});
 const RENDER_SCALE = PERFORMANCE.scale;
 document.body.classList.toggle('mobile-device',PERFORMANCE.mobile);
-function fitViewport(){const h=window.visualViewport?window.visualViewport.height:window.innerHeight;document.documentElement.style.setProperty('--mobile-board-width',Math.floor(Math.max(230,Math.min(520,(h-210)*440/570)))+'px')}
+function fitViewport(){const h=window.visualViewport?window.visualViewport.height:window.innerHeight;document.documentElement.style.setProperty('--mobile-board-width',Math.floor(Math.max(230,Math.min(520,(h-210)*440/570)))+'px');const board=document.getElementById('game');if(board&&board.clientWidth>0){board.style.paddingBottom='0';board.style.height=Math.round(board.clientWidth*570/440)+'px'}}
 fitViewport();window.addEventListener('resize',fitViewport,{passive:true});if(window.visualViewport)window.visualViewport.addEventListener('resize',fitViewport,{passive:true});
 const SCHOOLS = [
  ['厦门大学',21,'#678a91'],['武汉大学',26,'#6f9478'],['南开大学',32,'#8f729b'],
@@ -15,11 +15,11 @@ function readBest(){try{return Number(localStorage.getItem('campus-merge-best'))
 const state={score:0,best:readBest(),current:0,next:0,aim:220,paused:false,over:false,won:false,unlocked:new Set([0]),sound:false};
 let scene, audioContext, toastTimer;
 $('best').textContent=state.best;
-SCHOOLS.forEach((s,i)=>{let li=document.createElement('li');li.className='level'+(i===10?' final':'');li.id='level-'+i;li.innerHTML=`<span class="number">${String(i+1).padStart(2,'0')}</span><img decoding="async" loading="lazy" src="assets/icons/${i}.webp" alt="${s.name}校徽"><span class="school">${s.name}</span><span class="badge">${i===10?'终极目标':'待合成'}</span>`;$('levels').append(li)});
+SCHOOLS.forEach((s,i)=>{let li=document.createElement('li');li.className='level'+(i===10?' final':'');li.id='level-'+i;li.innerHTML=`<span class="number">${String(i+1).padStart(2,'0')}</span><img decoding="async" loading="lazy" src="assets/icons/${i}.png" alt="${s.name}校徽"><span class="school">${s.name}</span><span class="badge">${i===10?'终极目标':'待合成'}</span>`;$('levels').append(li)});
 function updateHud(){
  $('score').textContent=state.score;
  if(state.score>state.best){state.best=state.score;try{localStorage.setItem('campus-merge-best',state.best)}catch{}}
- $('best').textContent=state.best;if($('next').dataset.level!==String(state.next)){$('next').dataset.level=String(state.next);$('next').src=`assets/icons/${state.next}.webp`;$('next').alt='下一枚：'+SCHOOLS[state.next].name;}
+ $('best').textContent=state.best;if($('next').dataset.level!==String(state.next)){$('next').dataset.level=String(state.next);$('next').src=`assets/icons/${state.next}.png`;$('next').alt='下一枚：'+SCHOOLS[state.next].name;}
  for(let i=0;i<11;i++){let li=$('level-'+i),yes=state.unlocked.has(i);li.classList.toggle('unlocked',yes);li.querySelector('.badge').textContent=i===10?(yes?'已点亮 · 终极':'终极目标'):yes?'已点亮':'待合成';li.setAttribute('aria-label',SCHOOLS[i].name+'，'+(yes?'已点亮':'未解锁'))}
 }
 function toast(message){$('toast').textContent=message;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2100)}
@@ -28,14 +28,14 @@ function dialog(kind){state.paused=true;scene.matter.world.pause();$('overlay').
 function resume(){if(state.over)return;state.paused=false;scene.matter.world.resume();$('overlay').hidden=true;$('pause').innerHTML='Ⅱ <span>暂停</span>';scene.lastTime=0}
 class CampusScene extends Phaser.Scene{
  constructor(){super('campus');this.coins=new Set();this.merges=[];this.readyAt=0;this.elapsed=0;this.danger=0;this.lastTime=0;this.keys={};}
- preload(){SCHOOLS.forEach(s=>this.load.image('logo'+s.level,PERFORMANCE.mobile?`assets/mobile/${s.level}.webp`:`assets/${s.level}.png`))}
+ preload(){SCHOOLS.forEach(s=>this.load.image('logo'+s.level,PERFORMANCE.mobile?`assets/mobile/${s.level}.png`:`assets/${s.level}.png`))}
  create(){scene=this;this.cameras.main.setZoom(RENDER_SCALE).centerOn(220,285);this.matter.world.setBounds(5,-300,430,870,20,true,true,false,true);this.matter.world.engine.positionIterations=PERFORMANCE.mobile?6:10;this.matter.world.engine.velocityIterations=PERFORMANCE.mobile?4:8;
   SCHOOLS.forEach(s=>{const key='seal'+s.level;if(this.textures.exists(key))return;const size=CampusPlatform.textureSize(s.radius,PERFORMANCE),texture=this.textures.createCanvas(key,size,size),ctx=texture.context;ctx.scale(size/256,size/256);ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.fillStyle='#fffefa';ctx.beginPath();ctx.arc(128,128,126,0,Math.PI*2);ctx.fill();ctx.strokeStyle=s.color;ctx.lineWidth=3;ctx.stroke();ctx.save();ctx.beginPath();ctx.arc(128,128,117,0,Math.PI*2);ctx.clip();const source=this.textures.get('logo'+s.level).getSourceImage(),ratio=Math.min(222/source.width,222/source.height),w=source.width*ratio,h=source.height*ratio;ctx.drawImage(source,128-w/2,128-h/2,w,h);ctx.restore();texture.refresh();this.textures.remove('logo'+s.level)});
   this.line=this.add.graphics().setDepth(2);this.guide=this.add.graphics().setDepth(1);this.guide.lineStyle(1,0x9ca98b,.45);for(let y=82;y<553;y+=12)this.guide.lineBetween(0,y,0,y+4);this.ghost=this.add.image(220,43,'seal0').setDepth(5).setAlpha(.88);this.reset();
   this.cancelTouch=CampusPlatform.bindInput(this.game.canvas,window,{aim:x=>{state.aim=x},start:()=>{if(state.sound&&audioContext)audioContext.resume().catch(()=>{})},drop:()=>this.drop()});
   this.input.keyboard.on('keydown',e=>{if(['ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();this.keys[e.code]=true;if(e.code==='Space'&&!e.repeat)this.drop();if(e.code==='KeyP'&&!e.repeat)state.paused?resume():dialog('pause')});this.input.keyboard.on('keyup',e=>this.keys[e.code]=false);window.addEventListener('blur',()=>{this.keys={};this.cancelTouch()});
   const contact=event=>{for(const pair of event.pairs){const a=pair.bodyA.gameObject,b=pair.bodyB.gameObject;if(a&&b&&a!==b&&a.level===b.level&&a.active&&b.active&&!a.merging&&!b.merging){a.merging=b.merging=true;this.merges.push([a,b])}}};
-  this.matter.world.on('collisionstart',contact);this.matter.world.on('collisionactive',contact);
+  this.matter.world.on('collisionstart',contact);this.matter.world.on('collisionactive',contact);if(window.campusBootReady)window.campusBootReady();
  }
  reset(){for(const c of this.coins)c.destroy();this.coins.clear();this.merges=[];this.readyAt=0;this.elapsed=0;this.danger=0;this.warning=null;this.lastGhostLevel=-1;this.lastAim=-1;state.score=0;state.current=0;state.next=this.randomLevel();state.aim=220;state.over=false;state.won=false;state.unlocked=new Set([0]);resume();this.ghost.setVisible(true);updateHud();$('status').textContent='点击投下一枚校徽'}
  randomLevel(){const r=Math.random();return r<.44?0:r<.75?1:r<.94?2:3}
@@ -54,7 +54,7 @@ class CampusScene extends Phaser.Scene{
 
  }
 }
-const game=new Phaser.Game({type:Phaser.AUTO,width:440*RENDER_SCALE,height:570*RENDER_SCALE,parent:'game',transparent:true,physics:{default:'matter',matter:{gravity:{y:1.15},enableSleeping:true}},scene:CampusScene,fps:{target:60,limit:60},render:{antialias:true},input:{mouse:false,touch:false,keyboard:{capture:[32,37,39]}},audio:{noAudio:true}});
+const game=new Phaser.Game({type:PERFORMANCE.mobile?Phaser.CANVAS:Phaser.AUTO,width:440*RENDER_SCALE,height:570*RENDER_SCALE,parent:'game',transparent:true,physics:{default:'matter',matter:{gravity:{y:1.15},enableSleeping:true}},scene:CampusScene,fps:{target:60,limit:60},render:{antialias:true},input:{mouse:false,touch:false,keyboard:{capture:[32,37,39]}},audio:{noAudio:true}});
 $('pause').onclick=()=>{if(!state.over)state.paused?resume():dialog('pause')};$('continue').onclick=resume;$('over-restart').onclick=()=>scene.reset();$('restart').onclick=()=>{if(!state.over&&!state.paused&&state.score>0){dialog('pause');$('overlay-title').textContent='要开始新的一局吗？';$('overlay-text').textContent='点击下方「重新开始」清空本局，个人最佳会保留。'}else scene.reset()};$('sound').onclick=()=>{state.sound=!state.sound;$('sound').textContent='音效 · '+(state.sound?'开':'关');if(state.sound)tone(2)};
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&scene&&!state.paused&&!state.over)dialog('pause')});
 // Explicit development-only interface for deterministic real-physics smoke tests.

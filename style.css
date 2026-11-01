@@ -35,3 +35,31 @@ footer{max-width:1576px;margin-inline:auto;font-size:12px;padding:18px 0 24px}.o
 .level.final.unlocked img{box-shadow:0 0 0 2px #bd9c40,0 0 20px #d9ba5d90}
 @keyframes seal-unlock{0%{transform:scale(.88);filter:grayscale(1);box-shadow:0 0 0 1px #d9ddcf}45%{transform:scale(1.16);filter:none;box-shadow:0 0 0 5px #a7c76c60,0 0 24px #a7c76caa}100%{transform:scale(1)}}
 @media(prefers-reduced-motion:reduce){.level img{transition:none}.level.unlocked img{animation:none}}
+
+/* Padding ratio fallback also supports older embedded browser engines. */
+#game{position:relative;height:0;aspect-ratio:auto;padding-bottom:129.545455%}
+#game canvas{position:absolute;inset:0}
+.mobile-device header{height:58px;padding-inline:14px;padding-top:env(safe-area-inset-top,0px)}
+.mobile-device main{display:flex;flex-direction:column;max-width:680px;margin:8px auto 20px;padding:0 12px;gap:18px}
+.mobile-device .intro{display:none}
+.mobile-device .game-column{width:100%;max-width:var(--mobile-board-width,100%);align-self:center}
+.mobile-device .scorebar{height:64px;gap:20px;align-items:flex-start}
+.mobile-device .scorebar strong{font-size:30px;line-height:1.3}.mobile-device .scorebar .best strong{font-size:26px;padding-top:1px}
+.mobile-device .next{padding-top:0;gap:8px}.mobile-device .next img{width:43px;height:43px}
+.mobile-device .board-label{font-size:10px;padding:10px 12px 6px}
+.mobile-device .board-bottom{display:none}
+.mobile-device .board-wrap{border-radius:12px;box-shadow:none}
+.mobile-device .controls{margin-top:3px;font-size:13px}.mobile-device .controls button{min-height:44px;padding:10px}
+.mobile-device .keyboard{display:none}
+.mobile-device .collection{width:100%;border-left:0;border-top:1px solid var(--line);padding:18px 0 0;grid-column:auto}
+.mobile-device .collection ol{display:grid;grid-template-columns:1fr 1fr;gap:2px 12px}
+.mobile-device .level{width:100%;height:56px;gap:8px}.mobile-device .level:after{display:none}
+.mobile-device .level .school{font-size:12px}.mobile-device .level .badge{display:none}.mobile-device .level.final .badge{display:block}
+.mobile-device .level img{width:42px;height:42px;transition:none}
+.mobile-device .level.unlocked img{animation:mobile-unlock .35s ease-out;box-shadow:0 0 0 2px #8faa65}
+.mobile-device .level.final{grid-column:1/-1;margin:4px 0 0}.mobile-device .level.final img{box-shadow:0 0 0 2px #bd9c40}
+.mobile-device .collection-foot{display:none}.mobile-device footer{padding-bottom:max(18px,env(safe-area-inset-bottom,0px))}
+.mobile-device .overlay{backdrop-filter:none;-webkit-backdrop-filter:none;background:#f4f3eaf5}
+.mobile-device .overlay h2{font-size:26px}.mobile-device .overlay p{font-size:14px}.mobile-device .overlay button{min-height:44px}
+@keyframes mobile-unlock{from{transform:scale(.9)}to{transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.mobile-device .level.unlocked img{animation:none}}

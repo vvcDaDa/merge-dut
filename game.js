@@ -1,5 +1,5 @@
 /* Phaser 3 + Matter.js. Physics uses positive Y gravity and fixed circular bodies. */
-const RENDER_SCALE = Math.min(3, Math.max(2, window.devicePixelRatio || 1));
+const RENDER_SCALE = Math.min(5, Math.max(3, Math.ceil((window.devicePixelRatio || 1) * 640 / 440)));
 const SEAL_TEXTURE_SIZE = 1024;
 const SCHOOLS = [
  ['厦门大学',21,'#678a91'],['武汉大学',26,'#6f9478'],['南开大学',32,'#8f729b'],

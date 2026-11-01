@@ -22,3 +22,16 @@ footer{max-width:1576px;margin-inline:auto;font-size:12px;padding:18px 0 24px}.o
 @media(min-width:641px) and (max-width:1099px){main{max-width:980px;padding:0 26px;grid-template-columns:minmax(360px,640px) 260px;gap:24px}.intro{grid-column:1/-1;padding:0}.intro h1{font-size:32px;margin:8px 0}.intro h1 br{display:none}.intro h1 em{font-size:32px}.intro .lead,.intro .target,.intro .instructions,.intro .note{display:none}.collection{grid-column:auto;border-top:0;border-left:1px solid var(--line);padding:8px 0 0 20px}.collection ol{display:block}.level,.level.final{width:100%}.level:after{display:block}.collection-foot{display:flex}.scorebar{height:82px}}
 @media(min-width:641px) and (max-width:800px){main{max-width:670px;display:flex;flex-direction:column;padding:0 24px}.collection{border-left:0;border-top:1px solid var(--line);padding:24px 0}.collection ol{display:grid;grid-template-columns:1fr 1fr;gap:4px 22px}.level:after{display:none}.level.final{grid-column:1/-1}.game-column{width:100%}}
 @media(max-width:640px){header{height:70px;padding:0 18px}.brand{font-size:15px;letter-spacing:0}#sound{font-size:12px;padding:8px 12px}main{display:flex;max-width:520px;padding:0 14px;margin-top:20px;gap:24px}.intro{padding:0}.intro h1,.intro h1 em{font-size:27px}.eyebrow{font-size:11px}.scorebar{height:82px;gap:26px}.micro{font-size:11px}.scorebar strong{font-size:37px}.scorebar .best strong{font-size:30px}.next{gap:10px}.next img{width:48px;height:48px}.board-label{font-size:11px;padding:15px 15px 7px}.board-bottom{font-size:10px;margin:0 14px;height:34px}.controls{font-size:14px}.collection{padding:22px 0 0}.collection ol{display:grid;grid-template-columns:1fr 1fr;gap:2px 16px}.level{width:100%;height:58px;gap:8px}.level img{width:43px;height:43px}.level .school{font-size:12px}.level .number{font-size:10px;width:14px}.level .badge{display:none}.level.final{grid-column:1/-1;width:100%;margin:5px 0 0}.level.final .badge{display:block}.level:after{display:none}.collection-foot{display:none}footer{margin:0 18px;font-size:10px}.overlay h2{font-size:28px}.overlay p{font-size:14px}}
+
+/* Collection discovery: locked seals are grey; unlocked seals stay in full colour. */
+.level img{transition:filter .35s ease,opacity .35s ease,box-shadow .35s ease}
+.level:not(.unlocked) img{filter:grayscale(1);opacity:.38;box-shadow:0 0 0 1px #d9ddcf}
+.level:not(.unlocked) .school{color:#8e9685}
+.level.unlocked{border-radius:8px;background:linear-gradient(90deg,#dce9cc80,transparent)}
+.level.unlocked img{filter:none;opacity:1;box-shadow:0 0 0 2px #8faa65,0 0 14px #a9c76b70;animation:seal-unlock .75s ease-out}
+.level.unlocked .school{color:#315333;font-weight:600}
+.level.unlocked .badge{color:#4c7838;font-weight:600}
+.level.final.unlocked{background:#e5eccf;border-color:#a6b46e}
+.level.final.unlocked img{box-shadow:0 0 0 2px #bd9c40,0 0 20px #d9ba5d90}
+@keyframes seal-unlock{0%{transform:scale(.88);filter:grayscale(1);box-shadow:0 0 0 1px #d9ddcf}45%{transform:scale(1.16);filter:none;box-shadow:0 0 0 5px #a7c76c60,0 0 24px #a7c76caa}100%{transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.level img{transition:none}.level.unlocked img{animation:none}}

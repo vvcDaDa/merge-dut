@@ -17,7 +17,7 @@ function updateHud(){
  $('score').textContent=state.score;
  if(state.score>state.best){state.best=state.score;try{localStorage.setItem('campus-merge-best',state.best)}catch{}}
  $('best').textContent=state.best;$('next').src=`assets/${state.next}.png`;$('next').alt='下一枚：'+SCHOOLS[state.next].name;
- for(let i=0;i<11;i++){let li=$('level-'+i),yes=state.unlocked.has(i);li.classList.toggle('unlocked',yes);li.querySelector('.badge').textContent=i===10?'终极目标':yes?'已点亮':'待合成'}
+ for(let i=0;i<11;i++){let li=$('level-'+i),yes=state.unlocked.has(i);li.classList.toggle('unlocked',yes);li.querySelector('.badge').textContent=i===10?(yes?'已点亮 · 终极':'终极目标'):yes?'已点亮':'待合成';li.setAttribute('aria-label',SCHOOLS[i].name+'，'+(yes?'已点亮':'未解锁'))}
 }
 function toast(message){$('toast').textContent=message;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2100)}
 function tone(level){if(!state.sound)return;try{audioContext??=new(window.AudioContext||window.webkitAudioContext)();audioContext.resume();const o=audioContext.createOscillator(),g=audioContext.createGain();o.connect(g);g.connect(audioContext.destination);o.type='sine';o.frequency.setValueAtTime(300+level*65,audioContext.currentTime);o.frequency.exponentialRampToValueAtTime(600+level*70,audioContext.currentTime+.13);g.gain.setValueAtTime(.24,audioContext.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioContext.currentTime+.22);o.start();o.stop(audioContext.currentTime+.23)}catch{}}

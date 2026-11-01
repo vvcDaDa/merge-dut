@@ -5,10 +5,9 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   function profile(env) {
     const mobile = !!env.coarse || /Android|iPhone|iPad|iPod|Mobile/i.test(env.ua || '');
-    const embedded = mobile && /MQQBrowser|QQ\/|MicroMessenger/i.test(env.ua || '');
     const constrained = mobile && ((env.memory > 0 && env.memory <= 2) || (env.cores > 0 && env.cores <= 4));
-    const scale = mobile ? (embedded || constrained ? 1.5 : 2) : Math.min(5, Math.max(3, Math.ceil((env.dpr || 1) * 640 / 440)));
-    return { mobile, embedded, scale, maxTexture: mobile ? 512 : 1024, particles: mobile ? 3 : 9 };
+    const scale = mobile ? (constrained ? 1.5 : 2) : Math.min(5, Math.max(3, Math.ceil((env.dpr || 1) * 640 / 440)));
+    return { mobile, scale, maxTexture: mobile ? 512 : 1024, particles: mobile ? 3 : 9 };
   }
   function textureSize(radius, config) {
     return Math.min(config.maxTexture, Math.max(128, 2 ** Math.ceil(Math.log2(radius * 2 * config.scale))));

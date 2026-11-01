@@ -26,7 +26,7 @@
   window.setTimeout(function () { fail('加载时间较长，请检查网络后重试。'); }, 18000);
   if (retry) retry.onclick = function () {
     var base = window.location.href.split('#')[0].split('?')[0];
-    window.location.replace(base + '?v=mobile-safe-4&reload=' + Date.now());
+    window.location.replace(base + '?v=unified-mobile-5&reload=' + Date.now());
   };
   var mobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
   var files = mobile ? ['matter-core.js','mobile-game.js'] : ['assets/phaser.min.js','platform.js','game.js'];
@@ -34,7 +34,7 @@
   function loadNext() {
     if (position >= files.length) return;
     var script = document.createElement('script');
-    script.src = files[position++] + '?v=mobile-safe-4';
+    script.src = files[position++] + '?v=unified-mobile-5';
     script.async = false;
     script.onload = loadNext;
     script.onerror = function () { fail('游戏资源加载失败，请重新加载。'); };

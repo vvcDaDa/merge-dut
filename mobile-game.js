@@ -11,7 +11,8 @@
   function $(id) { return document.getElementById(id); }
   var board=$('game'),canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');
   if(!ctx||!M){if(window.campusBootFailed)window.campusBootFailed('游戏画布未能启动，请重新加载。');return;}
-  var scale=/MQQBrowser|QQ\/|MicroMessenger/i.test(navigator.userAgent)?1.5:2;
+  var constrained=(navigator.deviceMemory>0&&navigator.deviceMemory<=2)||(navigator.hardwareConcurrency>0&&navigator.hardwareConcurrency<=4);
+  var scale=constrained?1.5:2;
   canvas.width=440*scale;canvas.height=570*scale;board.appendChild(canvas);
   document.body.classList.add('mobile-device');
   function fit(){
